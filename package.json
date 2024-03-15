@@ -6,7 +6,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,8 @@
   },
   "directories": {
     "lib": "lib"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
