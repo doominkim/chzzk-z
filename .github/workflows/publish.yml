@@ -18,4 +18,4 @@ jobs:
 
         # NPM Access 토큰
         env:
-          NODE_AUTH_TOKEN: $
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
