@@ -4,4 +4,5 @@ src
 docs
 images
 tsconfig.json
+jest.config.js
 .*
