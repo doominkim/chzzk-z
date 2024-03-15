@@ -14,6 +14,7 @@ jobs:
       # 배포를 위한 명령어들
       - run: npm install
       - run: npm test
+      - run: npm run build
       - run: npm publish --access public
 
         # NPM Access 토큰
