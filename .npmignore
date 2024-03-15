@@ -1,0 +1,7 @@
+example.ts
+test.ts
+src
+docs
+images
+tsconfig.json
+.*
