@@ -1,1 +1,1 @@
-export * from "./chzzk";
+export * from "./chzzk-connector/chzzk-connector";

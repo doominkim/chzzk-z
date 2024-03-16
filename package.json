@@ -1,11 +1,12 @@
 {
   "name": "chzzk-z",
   "displayName": "chzzk-z",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "chzzk-z is naver streaming platform Chzzk Library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
+    "start": "tsc && node ./dist/test.js",
     "test": "jest --passWithNoTests",
     "build": "tsc",
     "lint": "eslint"
