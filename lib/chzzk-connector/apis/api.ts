@@ -1,4 +1,3 @@
-import { constants } from "../chzzk-connector.constants";
 import { ChzzkConnectorOptions } from "../interfaces/chzzk-connector-options.interface";
 import { HttpMethod } from "../types/api.types";
 
@@ -8,7 +7,7 @@ export const getContents = (
   options: ChzzkConnectorOptions
 ): Promise<Response> => {
   let headers = {};
-  const { nidAuth, nidSession, userAgent } = options;
+  const { nidAuth, nidSession } = options;
 
   if (nidAuth && nidSession) {
     headers[
@@ -16,14 +15,13 @@ export const getContents = (
     ] = `NID_AUT=${options.nidAuth};NID_SES=${options.nidSession}`;
   }
 
-  if (userAgent) {
-    headers["User-Agent"] = userAgent;
-  }
+  headers["User-Agent"] = "";
 
-  return fetch(constants.props.chzzkBaseUrl + url, {
+  return fetch(url, {
     method,
     headers,
   })
     .then((res) => res.json())
-    .then((data) => data["content"]);
+    .then((data) => data["content"] ?? null)
+    .catch((error) => console.error("Fetch Error:", error));
 };

@@ -1,5 +1,6 @@
-export class ChzzkConnectorOptions {
-  nidAuth: string;
-  nidSession: string;
-  userAgent?: string;
+export interface ChzzkConnectorOptions {
+  nidAuth?: string;
+  nidSession?: string;
+  channelId?: string;
+  chatChannelId?: string;
 }

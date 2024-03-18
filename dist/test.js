@@ -1,15 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./lib/index");
-const chzzkConnector = new index_1.ChzzkConnector({
-    nidAuth: "Q2MFEjdW4h4Z+XbgFG09TVW0mSkTKmBCsPdXK/Ho5eyX1+3CW5N/XUqIPJ0/GbqF",
-    nidSession: "AAABsBdVDfOQnlYGlx9+4kUtj9xTYbsO9oj12SwCX8bfZKiCPmQ2noCqYHossMYvLC928jx6d4esj9jmiows+yUIxHLOSYfAlwtoWacqyxMlQGQg+D8QYmW948GrDxhLOd3EqvEcOwuE+pg7hIRlQ17zfMHh82odGf0tbf4ssX2GSdsLWzysm4Ao0LtkZL2C2jKdsvOodnKLPMlJJ3WLRmf0sO4+cpYrRcDmHhEYsdVcNYl+IVtrI6bXAyJ2H7aH4ux57NQor2X4BWxphX+H2YDRI7UyC5A9iE2cfPZXvVv8ujt9mccLmLCCK2Ql22SJlqsIX3GYy2f5oRZ5EZHBa+6xcGtDQujZELrwu5OZ5IJVKNtDX331Eiu3WoEjwnIiVeAFxXixYsdJWGMqf1sV5Cwhw33NdqKHCvwQ9xgNmaVwnq5LYYTK+NLdkCQ5V/roqTfbYQCmNJCCnwkK0LSY/k0cGrI0Uzwi333s8iAUrjgLKl9w/yDADlsKS3Z721hcrZ0oVAWWO6qK/tjZd+YGioJRw4lFK7SUlyL/bnQ1X+2b7Uvutqm+l70n9u7LymYrfIacaw==",
-    userAgent: "chzzk-z-lib",
-});
+const chzzkConnector = new index_1.ChzzkConnector({});
 chzzkConnector.connect();
-find();
-async function find() {
-    const channel = await chzzkConnector.channel.findById("6e06f5e1907f17eff543abd06cb62891");
-    console.log(channel);
+start();
+async function start() {
+    const channels = await chzzkConnector.channel.find("녹두로");
+    const channelId = channels["data"][0]?.channel?.channelId;
+    if (!channelId)
+        return;
+    const channel = await chzzkConnector.channel.findById(channelId);
+    const status = await chzzkConnector.live.findStatusByChannelId(channelId);
+    const detail = await chzzkConnector.live.findDetailByChannelId(channelId);
+    const token = await chzzkConnector.chat.findAccessToken(status.chatChannelId);
+    await chzzkConnector.user.login("H6CMy83XKQFmrx9+G2mDmsXJOO04Dd58qEtNYAlDaEOTmJFhJr5Hv4O4As43Ft9D", "AAABpf986iC3RRpABFjeP62utjRsYeG7mBMmcrWPPoRmPGb51pPNn+eXykEnQW2/rgasfoa7tkHa+HxAp5dfF1mdOjFshCU0t6FIsAdu8ZwIp/MlnFiBDttmMZDM+uRqSAxoKNAQZJUQm+uleeHWfEuiic4oslaHpLGlOAWERnrYSPHYO0xbFF4BLEnKSCmwRsEF+/FQatKrr0KaNNJkN8WmMu8CwqZzxIG9PFSoGw3Z/R3ZuOYPIUGWOe66tGpsifZun8bvkxkqdaKwYw8ACaT+DFnwb/eqw7Ui6asAopEsY+m8maPYBGoFFf7kYDAvCPsSOSDjbaGIjBv0sDLUaipZhjEmGXxWX5+Ktsdo98aUNh9jVWZJ9JZts9Sv+8MvlFQFeFewqWn0vhLHuZw40svplhgmjCUKz4a3fKQDn1shGMLvcHkVfrx0Mi1N0ko0kY9JDnKmLXy2CzyKi0wgz09O1jGSOKoMyPjCSFSJNl9WGN+WqIBgIatPlbwA1MqAWvdqtJVYvIGraXG5je7o2ibl8mXncyJRgI17NmchuH8hWS1dcHSDW2UAHVYWHIZTXR00Ig==");
+    const user = await chzzkConnector.user.status();
+    console.log(user);
 }
 //# sourceMappingURL=test.js.map
