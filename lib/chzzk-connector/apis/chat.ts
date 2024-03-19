@@ -1,7 +1,7 @@
-import { ChzzkConnectorOptions } from "../interfaces/chzzk-connector-options.interface";
 import { HttpMethod } from "../types/api.types";
 import { getContents } from "./getContents";
 import { constants } from "../chzzk-connector.constants";
+import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
 
 class AccessToken {
   accessToken: string;
@@ -9,10 +9,10 @@ class AccessToken {
 }
 
 export class ChzzkChat {
-  private readonly options: ChzzkConnectorOptions;
+  private readonly option: ChzzkConnectorOptionDto;
 
-  constructor(options: ChzzkConnectorOptions) {
-    this.options = options;
+  constructor(options: ChzzkConnectorOptionDto) {
+    this.option = options;
   }
 
   async findAccessToken(chatChannelId: string): Promise<AccessToken> {
@@ -20,7 +20,7 @@ export class ChzzkChat {
       constants.props.gameBaseUrl +
         `/v1/chats/access-token?channelId=${chatChannelId}&chatType=STREAMING`,
       HttpMethod.GET,
-      this.options
+      this.option
     );
 
     let token: AccessToken = new AccessToken();

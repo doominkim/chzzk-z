@@ -1,18 +1,18 @@
-import { ChzzkConnectorOptions } from "../interfaces/chzzk-connector-options.interface";
+import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
 import { HttpMethod } from "../types/api.types";
 
 export const getContents = (
   url: string,
   method: HttpMethod,
-  options: ChzzkConnectorOptions
+  option: ChzzkConnectorOptionDto
 ): Promise<Response> => {
   let headers = {};
-  const { nidAuth, nidSession } = options;
+  const { nidAuth, nidSession } = option;
 
   if (nidAuth && nidSession) {
     headers[
       "Cookie"
-    ] = `NID_AUT=${options.nidAuth};NID_SES=${options.nidSession}`;
+    ] = `NID_AUT=${option.nidAuth};NID_SES=${option.nidSession}`;
   }
 
   headers["User-Agent"] = "";

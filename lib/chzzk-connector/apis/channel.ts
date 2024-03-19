@@ -1,12 +1,12 @@
-import { ChzzkConnectorOptions } from "../interfaces/chzzk-connector-options.interface";
 import { HttpMethod } from "../types/api.types";
 import { getContents } from "./getContents";
 import { constants } from "../chzzk-connector.constants";
+import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
 export class ChzzkChannel {
-  private readonly options: ChzzkConnectorOptions;
+  private readonly option: ChzzkConnectorOptionDto;
 
-  constructor(options: ChzzkConnectorOptions) {
-    this.options = options;
+  constructor(option: ChzzkConnectorOptionDto) {
+    this.option = option;
   }
 
   async find(keyword: string): Promise<Response> {
@@ -14,7 +14,7 @@ export class ChzzkChannel {
       constants.props.chzzkBaseUrl +
         `/service/v1/search/channels?keyword=${keyword}`,
       HttpMethod.GET,
-      this.options
+      this.option
     );
   }
 
@@ -22,7 +22,7 @@ export class ChzzkChannel {
     return getContents(
       constants.props.chzzkBaseUrl + `/service/v1/channels/${channelId}`,
       HttpMethod.GET,
-      this.options
+      this.option
     );
   }
 }

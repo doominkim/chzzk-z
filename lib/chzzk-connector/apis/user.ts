@@ -1,8 +1,8 @@
-import { ChzzkConnectorOptions } from "../interfaces/chzzk-connector-options.interface";
 import { HttpMethod } from "../types/api.types";
 import { getContents } from "./getContents";
 import { constants } from "../chzzk-connector.constants";
 import { plainToClass } from "class-transformer";
+import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
 
 class UserStatus {
   hasProfile: boolean;
@@ -17,22 +17,22 @@ class UserStatus {
 }
 
 export class ChzzkUser {
-  private options: ChzzkConnectorOptions;
+  private option: ChzzkConnectorOptionDto;
 
-  constructor(options: ChzzkConnectorOptions) {
-    this.options = options;
+  constructor(options: ChzzkConnectorOptionDto) {
+    this.option = options;
   }
 
   async login(nidAuth: string, nidSession: string): Promise<void> {
-    this.options.nidAuth = nidAuth;
-    this.options.nidSession = nidSession;
+    this.option.nidAuth = nidAuth;
+    this.option.nidSession = nidSession;
   }
 
   async status(): Promise<UserStatus> {
     const contents = await getContents(
       constants.props.gameBaseUrl + `/v1/user/getUserStatus`,
       HttpMethod.GET,
-      this.options
+      this.option
     );
 
     return plainToClass(UserStatus, contents);
