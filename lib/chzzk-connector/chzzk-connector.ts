@@ -38,6 +38,4 @@ export class ChzzkConnector {
       console.log(data);
     });
   }
-
-  async close() {}
 }

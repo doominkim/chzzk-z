@@ -1,7 +1,7 @@
 import { HttpMethod } from "../types/api.types";
-import { getContents } from "./getContents";
 import { constants } from "../chzzk-connector.constants";
 import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
+import { getContents } from "./api";
 
 class AccessToken {
   accessToken: string;

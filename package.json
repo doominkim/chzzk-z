@@ -1,12 +1,12 @@
 {
   "name": "chzzk-z",
   "displayName": "chzzk-z",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "chzzk-z is naver streaming platform Chzzk Library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "start": "rm -rf dist && tsc &&node ./dist/test.js",
+    "start": "rm -rf dist && tsc && node ./dist/test.js",
     "test": "jest --passWithNoTests",
     "test:e2e": "jest --config ./test/jest-e2e.json --passWithNoTests",
     "build": "tsc",

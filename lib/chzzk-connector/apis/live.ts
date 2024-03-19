@@ -1,8 +1,8 @@
 import { HttpMethod } from "../types/api.types";
-import { getContents } from "./getContents";
 import { constants } from "../chzzk-connector.constants";
 import { plainToClass } from "class-transformer";
 import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
+import { getContents } from "./api";
 class LiveStatus {
   liveTitle: string;
   status: string;
