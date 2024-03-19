@@ -1,1 +1,0 @@
-{"version":3,"file":"chzzk.js","sourceRoot":"","sources":["../lib/chzzk.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;AAAA,MAAa,KAAK;IAGhB;QAFA,kCAAU;QAGR,uBAAA,IAAI,mBAAa,EAAE,MAAA,CAAC;IACtB,CAAC;IAED,UAAU,CAAC,OAAe;QACxB,uBAAA,IAAI,uBAAU,CAAC,IAAI,CAAC,OAAO,CAAC,CAAC;IAC/B,CAAC;IAED,WAAW;QACT,OAAO,uBAAA,IAAI,uBAAU,CAAC;IACxB,CAAC;CACF;AAdD,sBAcC"}

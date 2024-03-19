@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "start": "tsc && node ./dist/test.js",
+    "start": " rm -rf dist && tsc  &&node ./dist/test.js",
     "test": "jest --passWithNoTests",
     "build": "tsc",
     "lint": "eslint"
@@ -40,6 +40,7 @@
     "class-transformer": "^0.5.1",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
+    "node-fetch": "^3.3.2",
     "typescript": "^5.4.2"
   }
 }

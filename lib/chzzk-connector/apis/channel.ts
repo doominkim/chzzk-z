@@ -1,6 +1,6 @@
 import { ChzzkConnectorOptions } from "../interfaces/chzzk-connector-options.interface";
 import { HttpMethod } from "../types/api.types";
-import { getContents } from "./api";
+import { getContents } from "./getContents";
 import { constants } from "../chzzk-connector.constants";
 export class ChzzkChannel {
   private readonly options: ChzzkConnectorOptions;
@@ -25,6 +25,4 @@ export class ChzzkChannel {
       this.options
     );
   }
-
-  // async findChatChannelId(channelId: string) {}
 }

@@ -1,10 +1,6 @@
-import { constants } from "./chzzk-connector.constants";
 import { WebSocket } from "ws";
 import { ChzzkConnectorOptions } from "./interfaces/chzzk-connector-options.interface";
-import { ChzzkChannel } from "./apis/channel";
-import { ChzzkChat } from "./apis/chat";
-import { ChzzkLive } from "./apis/live";
-import { ChzzkUser } from "./apis/user";
+import { ChzzkChannel, ChzzkChat, ChzzkLive, ChzzkUser } from "./apis";
 
 export class ChzzkConnector {
   private ws: WebSocket;
@@ -24,9 +20,7 @@ export class ChzzkConnector {
 
   async connect() {
     const ssID = Math.floor(Math.random() * 10) + 1;
-    //Load Balancing
 
-    //Connect Web Socket
     this.ws = new WebSocket(`wss://kr-ss${ssID}.chat.naver.com/chat`);
 
     this.ws.on("open", () => {
