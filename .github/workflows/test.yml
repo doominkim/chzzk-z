@@ -2,9 +2,9 @@ name: Test
 
 on:
   push:
-    branches: [qa]
+    branches: [release]
   pull_request:
-    branches: [qa]
+    branches: [release]
 
 run-name: Test with ${{ github.sha }} commit by ${{ github.actor }}
 
