@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [main]
 
+run-name: Test with ${{ github.sha }} commit by ${{ github.actor }}
+
 jobs:
   build:
     strategy:
