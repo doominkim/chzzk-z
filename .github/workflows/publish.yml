@@ -13,7 +13,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       # 배포를 위한 명령어들
       - run: npm install
-      - run: npm test:e2e
+      - run: npm run test:e2e
       - run: npm run build
       - run: npm publish --access public
 
