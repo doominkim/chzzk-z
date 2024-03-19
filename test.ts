@@ -1,4 +1,4 @@
-import { ChzzkConnector } from "./lib/index";
+import { ChzzkConnector } from "./lib";
 
 const chzzkConnector = new ChzzkConnector();
 

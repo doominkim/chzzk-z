@@ -7,7 +7,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "start": " rm -rf dist && tsc  &&node ./dist/test.js",
-    "test": "jest --passWithNoTests",
+    "test": "jest --detectOpenHandles --passWithNoTests",
+    "test:e2e": "jest --config ./test/jest-e2e.json --detectOpenHandles --passWithNoTests",
     "build": "tsc",
     "lint": "eslint"
   },
@@ -35,6 +36,7 @@
     "lib": "lib"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.11.28",
     "@types/ws": "^8.5.10",
     "class-transformer": "^0.5.1",
