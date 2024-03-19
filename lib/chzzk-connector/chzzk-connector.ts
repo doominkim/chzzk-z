@@ -10,12 +10,12 @@ export class ChzzkConnector {
   live: ChzzkLive;
   user: ChzzkUser;
 
-  constructor(options: ChzzkConnectorOptions) {
-    this.options = options;
-    this.channel = new ChzzkChannel(options);
-    this.chat = new ChzzkChat(options);
-    this.live = new ChzzkLive(options);
-    this.user = new ChzzkUser(options);
+  constructor() {
+    this.options = this.options;
+    this.channel = new ChzzkChannel(this.options);
+    this.chat = new ChzzkChat(this.options);
+    this.live = new ChzzkLive(this.options);
+    this.user = new ChzzkUser(this.options);
   }
 
   async connect() {
