@@ -1,7 +1,16 @@
+import { ChzzkConnector } from "../lib";
+
 describe("Chzzk-Z TEST SCENARIO => (e2e)", () => {
+  const chzzk = new ChzzkConnector();
+
+  afterAll((done) => {
+    done();
+  });
+
   describe("APIs TEST", () => {
     it("find channles => ", async () => {
-      expect(1).toBe(1);
+      const channels = await chzzk.channel.find("녹두로");
+      expect(channels["data"]?.length > 0).toBe(true);
     });
   });
 });

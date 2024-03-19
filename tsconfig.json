@@ -17,5 +17,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["lib", "test", "test/**/**.ts"],
+  "exclude": ["node_modules", "dist"]
 }
