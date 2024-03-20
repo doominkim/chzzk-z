@@ -1,7 +1,7 @@
 {
   "name": "chzzk-z",
   "displayName": "chzzk-z",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "chzzk-z is naver streaming platform Chzzk Library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
