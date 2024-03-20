@@ -1,5 +1,10 @@
-# Chzzk-Z
+# Chzzk-Z - JavaScript API for Chzzk
 
+![Generic badge](https://img.shields.io/badge/npm-v0.0.10-green.svg?logo=npm)
+![Generic badge](https://img.shields.io/badge/License-MIT-blue.svg)
+![Generic badge](https://img.shields.io/badge/nodejs-^18.x-blue.svg?logo=node.js)
+![Generic badge](https://img.shields.io/badge/PRs-welcome🙏-blue.svg)
+<br><br>
 Chzzk-Z is API library for chzzk for develop ChatBot, GameClient
 when naver creates an official API, the update stops. <br>
 
