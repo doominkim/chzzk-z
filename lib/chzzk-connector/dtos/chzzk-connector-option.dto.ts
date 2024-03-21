@@ -3,4 +3,6 @@ export class ChzzkConnectorOptionDto {
   nidSession: string;
   channelId: string;
   chatChannelId: string;
+  accessToken: string;
+  userId: string;
 }

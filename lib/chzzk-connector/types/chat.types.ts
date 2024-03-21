@@ -35,16 +35,22 @@ export interface SendMessageExtras {
 }
 
 export interface SendMessageBody {
-  extras: SendMessageExtras;
-  msg: string;
-  msgTime: string;
-  msgTypeCode: MsgTypeCode;
-  recentMessageCount: number;
+  extras?: SendMessageExtras;
+  msg?: string;
+  msgTime?: string;
+  msgTypeCode?: MsgTypeCode;
+  recentMessageCount?: number;
+  devType?: number;
+  uid?: string;
+  auth?: string;
+  accTkn?: string;
 }
 
 export interface SendMessageData {
   cmd: MsgCmd;
-  ver: string;
+  ver?: string;
+  cid?: string;
+  svcid?: string;
   bdy?: SendMessageBody;
   sid?: string;
   tid?: number;
