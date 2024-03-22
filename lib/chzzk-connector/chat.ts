@@ -1,7 +1,6 @@
-import { constants } from "../chzzk-connector.constants";
-import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
 import { WebSocket } from "ws";
-import { MsgCmd, SendMessageData } from "../types/chat.types";
+import { ChzzkConnectorOptionDto } from "./dtos/chzzk-connector-option.dto";
+import { MsgCmd, SendMessageData } from "./types/chat.types";
 
 export class ChzzkChat {
   private readonly option: ChzzkConnectorOptionDto;

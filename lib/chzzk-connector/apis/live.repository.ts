@@ -1,8 +1,9 @@
 import { HttpMethod } from "../types/api.types";
-import { constants } from "../chzzk-connector.constants";
+import { constants } from "../constants";
 import { plainToClass } from "class-transformer";
 import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
-import { getContents } from "./api";
+import { getContents } from "./api.repository";
+
 class LiveStatus {
   liveTitle: string;
   status: string;
@@ -22,30 +23,31 @@ class LiveStatus {
   chatAvailableCondition: string;
   minFollowerMinute: number;
 }
-export class ChzzkLive {
-  private readonly option: ChzzkConnectorOptionDto;
 
-  constructor(options: ChzzkConnectorOptionDto) {
-    this.option = options;
-  }
-
-  async findStatusByChannelId(channelId: string): Promise<LiveStatus> {
+export class ChzzkLiveRepository {
+  async findStatusByChannelId(
+    channelId: string,
+    option: ChzzkConnectorOptionDto
+  ): Promise<LiveStatus> {
     const contents = await getContents(
       constants.props.chzzkBaseUrl +
         `/polling/v2/channels/${channelId}/live-status`,
       HttpMethod.GET,
-      this.option
+      option
     );
 
     return plainToClass(LiveStatus, contents);
   }
 
-  async findDetailByChannelId(channelId: string): Promise<Response> {
+  async findDetailByChannelId(
+    channelId: string,
+    option: ChzzkConnectorOptionDto
+  ): Promise<Response> {
     return await getContents(
       constants.props.chzzkBaseUrl +
         `/polling/v2/channels/${channelId}/live-detail`,
       HttpMethod.GET,
-      this.option
+      option
     );
   }
 }
