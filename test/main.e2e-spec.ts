@@ -9,7 +9,7 @@ describe("Chzzk-Z TEST SCENARIO => (e2e)", () => {
 
   describe("APIs TEST", () => {
     it("find channles => ", async () => {
-      const channels = await chzzk.channel.find("녹두로");
+      const channels = await chzzk.channel.findByKeyword("녹두로");
       expect(channels["data"]?.length > 0).toBe(true);
     });
   });

@@ -1,23 +1,28 @@
 import { ChzzkConnectorOptionDto } from "./dtos/chzzk-connector-option.dto";
-import { ChzzkUserRepository } from "./apis";
+import {
+  ChzzkChannelRepository,
+  ChzzkUserRepository,
+  UserStatus,
+} from "./apis";
+import { ChzzkConnector } from "./connector";
 
 export class ChzzkUser {
-  private readonly option: ChzzkConnectorOptionDto;
+  private cc: ChzzkConnector;
+  private userRepository = new ChzzkUserRepository();
   private loggedIn: boolean;
-  chzzkUserRepository: ChzzkUserRepository = new ChzzkUserRepository();
 
-  constructor(option: ChzzkConnectorOptionDto) {
-    this.option = option;
+  constructor(cc: ChzzkConnector) {
+    this.cc = cc;
   }
 
   async login(nidAuth: string, nidSession: string): Promise<void> {
-    this.option.nidAuth = nidAuth;
-    this.option.nidSession = nidSession;
+    this.cc.option.nidAuth = nidAuth;
+    this.cc.option.nidSession = nidSession;
 
-    const status = await this.chzzkUserRepository.status(this.option);
+    const status = await this.userRepository.status(this.cc.option);
     if (!status.loggedIn) {
-      this.option.nidAuth = null;
-      this.option.nidSession = null;
+      this.cc.option.nidAuth = null;
+      this.cc.option.nidSession = null;
       throw new Error("failed to login.");
     } else {
       this.loggedIn = true;
@@ -29,7 +34,11 @@ export class ChzzkUser {
       throw new Error("not logged in.");
     }
 
-    this.option.nidAuth = null;
-    this.option.nidSession = null;
+    this.cc.option.nidAuth = null;
+    this.cc.option.nidSession = null;
+  }
+
+  async status(): Promise<UserStatus> {
+    return this.userRepository.status(this.cc.option);
   }
 }

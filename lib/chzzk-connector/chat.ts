@@ -1,14 +1,15 @@
 import { WebSocket } from "ws";
 import { ChzzkConnectorOptionDto } from "./dtos/chzzk-connector-option.dto";
 import { MsgCmd, SendMessageData } from "./types/chat.types";
+import { ChzzkConnector } from "./connector";
 
 export class ChzzkChat {
-  private readonly option: ChzzkConnectorOptionDto;
+  private cc: ChzzkConnector;
   private ws: WebSocket;
-  #pingIntervalId: any;
+  private pingIntervalId: any;
 
-  constructor(options: ChzzkConnectorOptionDto) {
-    this.option = options;
+  constructor(cc: ChzzkConnector) {
+    this.cc = cc;
   }
 
   async join(channelId: string) {}
@@ -29,15 +30,15 @@ export class ChzzkChat {
 
       this.sendMessage({
         cmd: MsgCmd.CONNECTED,
-        cid: this.option.chatChannelId,
+        cid: this.cc.option.chatChannelId,
         svcid: "game",
         ver: "2",
         tid: 1,
         bdy: {
-          accTkn: this.option.accessToken,
+          accTkn: this.cc.option.accessToken,
           auth: "SEND",
           devType: 2001,
-          uid: this.option.userId,
+          uid: this.cc.option.userId,
         },
       });
     });
@@ -54,8 +55,8 @@ export class ChzzkChat {
     });
   }
   async disconnect() {
-    if (this.#pingIntervalId) {
-      clearInterval(this.#pingIntervalId);
+    if (this.pingIntervalId) {
+      clearInterval(this.pingIntervalId);
     }
 
     if (this.ws.readyState === WebSocket.OPEN) {
@@ -89,7 +90,7 @@ export class ChzzkChat {
 
   private connectHandler() {
     // If the interval is reduced, overhead can occur.
-    this.#pingIntervalId = setInterval(() => {
+    this.pingIntervalId = setInterval(() => {
       this.sendMessage({
         cmd: MsgCmd.PING,
         ver: "2",

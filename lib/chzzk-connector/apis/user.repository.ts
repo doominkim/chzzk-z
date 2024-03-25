@@ -4,7 +4,7 @@ import { plainToClass } from "class-transformer";
 import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
 import { getContents } from "./api.repository";
 
-class UserStatus {
+export class UserStatus {
   hasProfile: boolean;
   userIdHash: string;
   nickname: string;

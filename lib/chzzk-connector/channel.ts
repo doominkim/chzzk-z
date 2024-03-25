@@ -3,28 +3,31 @@ import { ChzzkChannelRepository } from "./apis";
 import { ChzzkConnector } from "./connector";
 
 export class ChzzkChannel {
-  private readonly option: ChzzkConnectorOptionDto;
-  chzzkChannelRepository: ChzzkChannelRepository;
+  private cc: ChzzkConnector;
+  private chzzkChannelRepository = new ChzzkChannelRepository();
 
   constructor(cc: ChzzkConnector) {
-    this.chzzkChannelRepository = cc.channel.chzzkChannelRepository;
+    this.cc = cc;
   }
 
   async findByKeyword(keyword: string) {
     return await this.chzzkChannelRepository.findByKeyword(
       keyword,
-      this.option
+      this.cc.option
     );
   }
 
   async findById(channelId: string) {
-    return await this.chzzkChannelRepository.findById(channelId, this.option);
+    return await this.chzzkChannelRepository.findById(
+      channelId,
+      this.cc.option
+    );
   }
 
   async findAccessTokenById(chatChannelId: string) {
     return await this.chzzkChannelRepository.findAccessTokenById(
       chatChannelId,
-      this.option
+      this.cc.option
     );
   }
 }
