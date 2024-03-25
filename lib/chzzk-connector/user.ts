@@ -20,6 +20,8 @@ export class ChzzkUser {
     this.cc.option.nidSession = nidSession;
 
     const status = await this.userRepository.status(this.cc.option);
+
+    this.cc.option.userId = status.userIdHash;
     if (!status.loggedIn) {
       this.cc.option.nidAuth = null;
       this.cc.option.nidSession = null;

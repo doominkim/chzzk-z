@@ -12,7 +12,15 @@ export class ChzzkChat {
     this.cc = cc;
   }
 
-  async join(channelId: string) {}
+  async join(channelId: string) {
+    const status = await this.cc.live.findStatusByChannelId(channelId);
+    const token = await this.cc.channel.findAccessTokenById(
+      status.chatChannelId
+    );
+
+    this.cc.option.accessToken = token.accessToken;
+    this.cc.option.chatChannelId = status.chatChannelId;
+  }
 
   async connect() {
     const ssID = Math.floor(Math.random() * 10) + 1;
@@ -25,21 +33,25 @@ export class ChzzkChat {
   }
 
   private openHandler() {
-    this.ws.on("open", () => {
-      console.log("connected!");
+    let body = {
+      accTkn: this.cc.option.accessToken,
+      auth: "READ",
+      devType: 2001,
+    };
 
+    if (this.cc.option.userId) {
+      body["uid"] = this.cc.option.userId;
+      body["auth"] = "SEND";
+    }
+
+    this.ws.on("open", () => {
       this.sendMessage({
-        cmd: MsgCmd.CONNECTED,
+        cmd: MsgCmd.CONNECT,
         cid: this.cc.option.chatChannelId,
         svcid: "game",
         ver: "2",
         tid: 1,
-        bdy: {
-          accTkn: this.cc.option.accessToken,
-          auth: "SEND",
-          devType: 2001,
-          uid: this.cc.option.userId,
-        },
+        bdy: body,
       });
     });
   }
@@ -54,6 +66,60 @@ export class ChzzkChat {
       this.disconnect();
     });
   }
+
+  private messageHandler() {
+    this.ws.on("message", async (data) => {
+      data = JSON.parse(data.toString());
+      this.handleMessage(data);
+    });
+  }
+
+  private connectHandler() {
+    // If the interval is reduced, overhead can occur.
+    this.pingIntervalId = setInterval(() => {
+      this.sendMessage({
+        cmd: MsgCmd.PING,
+        ver: "2",
+      });
+    }, 10000);
+  }
+
+  private async handleMessage(data: any) {
+    // console.log("handleMessage => ", data);
+    switch (data["cmd"]) {
+      case MsgCmd.PING:
+        this.sendMessage({
+          cmd: MsgCmd.PONG,
+          ver: "2",
+        });
+        break;
+
+      case MsgCmd.CONNECTED:
+        // console.log(data);
+        this.cc.option.sid = data["bdy"]?.sid;
+        this.ws.emit("connect", null);
+
+        break;
+
+      case MsgCmd.CHAT:
+        console.log(
+          JSON.parse(data["bdy"][0]["profile"]).nickname,
+          data["bdy"][0]["msg"]
+        );
+        break;
+
+      case MsgCmd.RECENT_CHAT:
+      case MsgCmd.DONATION:
+      case MsgCmd.KICK:
+      case MsgCmd.BLOCK:
+      case MsgCmd.BLIND:
+      case MsgCmd.NOTICE:
+      case MsgCmd.PENALTY:
+        console.log(data);
+        break;
+    }
+  }
+
   async disconnect() {
     if (this.pingIntervalId) {
       clearInterval(this.pingIntervalId);
@@ -66,36 +132,9 @@ export class ChzzkChat {
     }
   }
 
-  private messageHandler() {
-    this.ws.on("message", async (data) => {
-      data = JSON.parse(data.toString());
-      this.handleMessage(data);
-    });
-  }
-  private async handleMessage(data: any) {
-    console.log("handleMessage => ", data);
-    switch (data["cmd"]) {
-      case MsgCmd.PING:
-        this.sendMessage({
-          cmd: MsgCmd.PONG,
-          ver: "2",
-        });
-        console.log("handleMessage => send pong");
-    }
-  }
-
   private sendMessage(sendMessageData: SendMessageData) {
     this.ws.send(JSON.stringify(sendMessageData));
   }
 
-  private connectHandler() {
-    // If the interval is reduced, overhead can occur.
-    this.pingIntervalId = setInterval(() => {
-      this.sendMessage({
-        cmd: MsgCmd.PING,
-        ver: "2",
-      });
-      console.log("connectHandler => send ping");
-    }, 10000);
-  }
+  chat(message: string) {}
 }

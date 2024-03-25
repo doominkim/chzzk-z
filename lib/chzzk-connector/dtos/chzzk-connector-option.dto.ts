@@ -5,6 +5,7 @@ export class ChzzkConnectorOptionDto {
   private _chatChannelId: string;
   private _accessToken: string;
   private _userId: string;
+  private _sid: string;
 
   constructor() {}
 
@@ -54,5 +55,13 @@ export class ChzzkConnectorOptionDto {
 
   set userId(value: string) {
     this._userId = value;
+  }
+
+  get sid(): string {
+    return this._sid;
+  }
+
+  set sid(value: string) {
+    this._sid = value;
   }
 }
