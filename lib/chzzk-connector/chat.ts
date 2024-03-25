@@ -1,6 +1,6 @@
 import { WebSocket } from "ws";
 import { ChzzkConnectorOptionDto } from "./dtos/chzzk-connector-option.dto";
-import { MsgCmd, SendMessageData } from "./types/chat.types";
+import { MsgCmd, MsgTypeCode, SendMessageData } from "./types/chat.types";
 import { ChzzkConnector } from "./connector";
 
 export class ChzzkChat {
@@ -136,5 +136,29 @@ export class ChzzkChat {
     this.ws.send(JSON.stringify(sendMessageData));
   }
 
-  chat(message: string) {}
+  chat(message: string) {
+    this.sendMessage({
+      cid: this.cc.option.chatChannelId,
+      svcid: "game",
+      ver: "2",
+      bdy: {
+        extras: JSON.stringify({
+          chatType: "STREAMING",
+          emojis: "",
+          osType: "PC",
+          streamingChannelId: this.cc.option.chatChannelId,
+        }),
+        msg: message,
+        msgTime: Date.now(),
+        msgTypeCode: MsgTypeCode.TEXT,
+      },
+      retry: false,
+      cmd: MsgCmd.SEND_CHAT,
+      sid: this.cc.option.sid,
+      tid: 3,
+    });
+    const extras = {};
+
+    this.ws.send(JSON.stringify({}));
+  }
 }

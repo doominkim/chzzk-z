@@ -31,13 +31,13 @@ export interface SendMessageExtras {
   chatType: string; // "STREAMING",
   emojis: string; // "",
   osType: string; // "PC",
-  streamingChannelId: number;
+  streamingChannelId: string;
 }
 
 export interface SendMessageBody {
-  extras?: SendMessageExtras;
+  extras?: string;
   msg?: string;
-  msgTime?: string;
+  msgTime?: number;
   msgTypeCode?: MsgTypeCode;
   recentMessageCount?: number;
   devType?: number;
@@ -55,5 +55,5 @@ export interface SendMessageData {
   sid?: string;
   tid?: number;
   uid?: string;
-  retry?: number;
+  retry?: boolean;
 }
