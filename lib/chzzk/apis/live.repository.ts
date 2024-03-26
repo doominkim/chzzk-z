@@ -1,7 +1,7 @@
 import { HttpMethod } from "../types/api.types";
 import { constants } from "../constants";
 import { plainToClass } from "class-transformer";
-import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
+import { ChzzkModuleOptionDto } from "../dtos/chzzk-connector-option.dto";
 import { getContents } from "./api.repository";
 
 export class LiveStatus {
@@ -27,7 +27,7 @@ export class LiveStatus {
 export class ChzzkLiveRepository {
   async findStatusByChannelId(
     channelId: string,
-    option: ChzzkConnectorOptionDto
+    option: ChzzkModuleOptionDto
   ): Promise<LiveStatus> {
     const contents = await getContents(
       constants.props.chzzkBaseUrl +
@@ -41,7 +41,7 @@ export class ChzzkLiveRepository {
 
   async findDetailByChannelId(
     channelId: string,
-    option: ChzzkConnectorOptionDto
+    option: ChzzkModuleOptionDto
   ): Promise<Response> {
     return await getContents(
       constants.props.chzzkBaseUrl +

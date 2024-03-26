@@ -1,6 +1,6 @@
 import { HttpMethod } from "../types/api.types";
 import { constants } from "../constants";
-import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
+import { ChzzkModuleOptionDto } from "../dtos/chzzk-connector-option.dto";
 import { getContents } from "./api.repository";
 
 class AccessToken {
@@ -10,7 +10,7 @@ class AccessToken {
 export class ChzzkChannelRepository {
   async findByKeyword(
     keyword: string,
-    option: ChzzkConnectorOptionDto
+    option: ChzzkModuleOptionDto
   ): Promise<Response> {
     return await getContents(
       constants.props.chzzkBaseUrl +
@@ -20,7 +20,7 @@ export class ChzzkChannelRepository {
     );
   }
 
-  async findById(channelId: string, option: ChzzkConnectorOptionDto) {
+  async findById(channelId: string, option: ChzzkModuleOptionDto) {
     return await getContents(
       constants.props.chzzkBaseUrl + `/service/v1/channels/${channelId}`,
       HttpMethod.GET,
@@ -30,7 +30,7 @@ export class ChzzkChannelRepository {
 
   async findAccessTokenById(
     chatChannelId: string,
-    option: ChzzkConnectorOptionDto
+    option: ChzzkModuleOptionDto
   ): Promise<AccessToken> {
     const contents = await await getContents(
       constants.props.gameBaseUrl +

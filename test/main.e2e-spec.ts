@@ -1,7 +1,7 @@
-import { ChzzkConnector } from "../lib";
+import { ChzzkModule } from "../lib";
 
 describe("Chzzk-Z TEST SCENARIO => (e2e)", () => {
-  const chzzk = new ChzzkConnector();
+  const chzzk = new ChzzkModule();
 
   afterAll((done) => {
     done();

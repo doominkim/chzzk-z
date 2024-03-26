@@ -1,4 +1,4 @@
-export class ChzzkConnectorOptionDto {
+export class ChzzkModuleOptionDto {
   private _nidAuth: string;
   private _nidSession: string;
   private _channelId: string;

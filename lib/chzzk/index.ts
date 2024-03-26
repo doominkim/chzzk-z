@@ -1,4 +1,4 @@
-export * from "./connector";
+export * from "../module";
 export * from "./channel";
 export * from "./live";
 export * from "./user";

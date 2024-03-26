@@ -1,25 +1,28 @@
 import { WebSocket } from "ws";
-import { ChzzkConnectorOptionDto } from "./dtos/chzzk-connector-option.dto";
 import { MsgCmd, MsgTypeCode, SendMessageData } from "./types/chat.types";
-import { ChzzkConnector } from "./connector";
+import { ChzzkModule } from "../module";
+import { ChzzkModuleOptionDto } from "./dtos/chzzk-connector-option.dto";
 
 export class ChzzkChat {
-  private cc: ChzzkConnector;
+  private cm: ChzzkModule;
+  private opt: ChzzkModuleOptionDto;
   private ws: WebSocket;
   private pingIntervalId: any;
+  private _connected: boolean;
 
-  constructor(cc: ChzzkConnector) {
-    this.cc = cc;
+  constructor(cm: ChzzkModule, opt: ChzzkModuleOptionDto) {
+    this.cm = cm;
+    this.opt = opt;
   }
 
   async join(channelId: string) {
-    const status = await this.cc.live.findStatusByChannelId(channelId);
-    const token = await this.cc.channel.findAccessTokenById(
+    const status = await this.cm.live.findStatusByChannelId(channelId);
+    const token = await this.cm.channel.findAccessTokenById(
       status.chatChannelId
     );
 
-    this.cc.option.accessToken = token.accessToken;
-    this.cc.option.chatChannelId = status.chatChannelId;
+    this.opt.accessToken = token.accessToken;
+    this.opt.chatChannelId = status.chatChannelId;
   }
 
   async connect() {
@@ -34,25 +37,26 @@ export class ChzzkChat {
 
   private openHandler() {
     let body = {
-      accTkn: this.cc.option.accessToken,
+      accTkn: this.opt.accessToken,
       auth: "READ",
       devType: 2001,
     };
 
-    if (this.cc.option.userId) {
-      body["uid"] = this.cc.option.userId;
+    if (this.opt.userId) {
+      body["uid"] = this.opt.userId;
       body["auth"] = "SEND";
     }
 
     this.ws.on("open", () => {
       this.sendMessage({
         cmd: MsgCmd.CONNECT,
-        cid: this.cc.option.chatChannelId,
+        cid: this.opt.chatChannelId,
         svcid: "game",
         ver: "2",
         tid: 1,
         bdy: body,
       });
+      this._connected = true;
     });
   }
 
@@ -95,8 +99,7 @@ export class ChzzkChat {
         break;
 
       case MsgCmd.CONNECTED:
-        // console.log(data);
-        this.cc.option.sid = data["bdy"]?.sid;
+        this.opt.sid = data["bdy"]?.sid;
         this.ws.emit("connect", null);
 
         break;
@@ -128,8 +131,10 @@ export class ChzzkChat {
     if (this.ws.readyState === WebSocket.OPEN) {
       this.ws.close();
     } else {
-      console.log("already disconnected");
+      console.log("disconnected");
     }
+
+    this._connected = false;
   }
 
   private sendMessage(sendMessageData: SendMessageData) {
@@ -137,8 +142,16 @@ export class ChzzkChat {
   }
 
   chat(message: string) {
+    if (!this.cm.user.loggedIn) {
+      throw new Error("You must be logged in.");
+    }
+
+    if (!this.connected) {
+      throw new Error("You must be connected to one of channel.");
+    }
+
     this.sendMessage({
-      cid: this.cc.option.chatChannelId,
+      cid: this.opt.chatChannelId,
       svcid: "game",
       ver: "2",
       bdy: {
@@ -146,7 +159,7 @@ export class ChzzkChat {
           chatType: "STREAMING",
           emojis: "",
           osType: "PC",
-          streamingChannelId: this.cc.option.chatChannelId,
+          streamingChannelId: this.opt.chatChannelId,
         }),
         msg: message,
         msgTime: Date.now(),
@@ -154,11 +167,15 @@ export class ChzzkChat {
       },
       retry: false,
       cmd: MsgCmd.SEND_CHAT,
-      sid: this.cc.option.sid,
+      sid: this.opt.sid,
       tid: 3,
     });
     const extras = {};
 
     this.ws.send(JSON.stringify({}));
+  }
+
+  get connected(): boolean {
+    return this._connected;
   }
 }

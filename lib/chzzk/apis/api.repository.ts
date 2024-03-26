@@ -1,10 +1,10 @@
-import { ChzzkConnectorOptionDto } from "../dtos/chzzk-connector-option.dto";
+import { ChzzkModuleOptionDto } from "../dtos/chzzk-connector-option.dto";
 import { HttpMethod } from "../types/api.types";
 
 export const getContents = (
   url: string,
   method: HttpMethod,
-  option: ChzzkConnectorOptionDto
+  option: ChzzkModuleOptionDto
 ): Promise<Response> => {
   let headers = {};
   const { nidAuth, nidSession } = option;

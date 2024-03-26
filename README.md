@@ -36,37 +36,37 @@ import * from "chzzk-z";
 **/
 
 // create ChzzkConnect Object
-const chzzkConnector = new ChzzkConnector();
+const chzzkModule = new ChzzkModule();
 
 // find channles by string keyword
-const channels = await chzzkConnector.channel.find("침착맨");
+const channels = await chzzkModule.channel.find("침착맨");
 
 // channelId
 const channelId = channels["data"][0]?.channel?.channelId;
 
 // find specific channel by channelId
-const channel = await chzzkConnector.channel.findById(channelId);
+const channel = await chzzkModule.channel.findById(channelId);
 
 // get channel status
-const status = await chzzkConnector.live.findStatusByChannelId(channelId);
+const status = await chzzkModule.live.findStatusByChannelId(channelId);
 
 // get channel detail
-const detail = await chzzkConnector.live.findDetailByChannelId(channelId);
+const detail = await chzzkModule.live.findDetailByChannelId(channelId);
 
 // get channel access token
-const token = await chzzkConnector.chat.findAccessToken(status.chatChannelId);
+const token = await chzzkModule.chat.findAccessToken(status.chatChannelId);
 
 /**
     User
 **/
 
 //login
-await chzzkConnector.user.login(
+await chzzkModule.user.login(
     YOUR_NID_AUTH, YOUR_NID_SESSION
   );
 
 //get your naver account info
-const user = await chzzkConnector.user.status();
+const user = await chzzkModule.user.status();
 
 
 
