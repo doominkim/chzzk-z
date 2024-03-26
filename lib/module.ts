@@ -11,10 +11,10 @@ export class ChzzkModule {
   readonly user: ChzzkUser;
 
   constructor() {
-    const moduleOption = new ChzzkModuleOptionDto();
-    this.channel = new ChzzkChannel(this, moduleOption);
-    this.chat = new ChzzkChat(this, moduleOption);
-    this.live = new ChzzkLive(this, moduleOption);
-    this.user = new ChzzkUser(this, moduleOption);
+    const option = new ChzzkModuleOptionDto();
+    this.channel = new ChzzkChannel(this, option);
+    this.chat = new ChzzkChat(this, option);
+    this.live = new ChzzkLive(this, option);
+    this.user = new ChzzkUser(this, option);
   }
 }
