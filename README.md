@@ -1,6 +1,6 @@
 # Chzzk-Z - JavaScript API for Chzzk
 
-![Generic badge](https://img.shields.io/badge/npm-v0.0.10-green.svg?logo=npm)
+![Generic badge](https://img.shields.io/badge/npm-v0.1.1-green.svg?logo=npm)
 ![Generic badge](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Generic badge](https://img.shields.io/badge/nodejs-^18.x-blue.svg?logo=node.js)
 ![Generic badge](https://img.shields.io/badge/PRs-welcome🙏-blue.svg)
@@ -15,6 +15,11 @@ It's very unstable now, so don't use it before it becomes version 1.0.0.
 - Available over node.js 18
 
 # Key Features:
+
+- User Login / Find User Infomation
+- Join Chatting Room / Quit Chatting Room / Send Chat
+- Find Channel Infomation
+- WebSocket Connect ( Streaming Type )
 
 ### Installration
 
