@@ -1,7 +1,15 @@
+# config files
 tsconfig.json
 jest.config.js
+babal.config.js
+babel.config.js
+
+# .* files
 .*
+
+# test files
 test.ts
 test
-babal.config.js
+
+# original source files
 lib

@@ -43,11 +43,13 @@ export class ChzzkLiveRepository {
     channelId: string,
     option: ChzzkModuleOptionDto
   ): Promise<Response> {
-    return await getContents(
+    const detail = await getContents(
       constants.props.chzzkBaseUrl +
-        `/polling/v2/channels/${channelId}/live-detail`,
+        `/service/v2/channels/${channelId}/live-detail`,
       HttpMethod.GET,
       option
     );
+    console.log(detail);
+    return detail;
   }
 }
