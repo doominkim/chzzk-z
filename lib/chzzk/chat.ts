@@ -125,7 +125,7 @@ export class ChzzkChat {
           this.messages.push(message);
           break;
 
-        // case MsgCmd.CHAT:
+        case MsgCmd.CHAT:
         case MsgCmd.RECENT_CHAT:
         case MsgCmd.DONATION:
         case MsgCmd.KICK:
