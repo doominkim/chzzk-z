@@ -9,6 +9,7 @@ export class ChzzkChat {
   private ws: WebSocket;
   private pingIntervalId: any;
   private _connected: boolean;
+  private messages: any = [];
 
   constructor(cm: ChzzkModule, opt: ChzzkModuleOptionDto) {
     this.cm = cm;
@@ -23,9 +24,14 @@ export class ChzzkChat {
 
     this.opt.accessToken = token.accessToken;
     this.opt.chatChannelId = status.chatChannelId;
+    this.connect();
   }
 
-  async connect() {
+  async quit() {
+    this.disconnect();
+  }
+
+  private async connect() {
     const ssID = Math.floor(Math.random() * 10) + 1;
     this.ws = new WebSocket(`wss://kr-ss${ssID}.chat.naver.com/chat`);
     this.openHandler();
@@ -89,41 +95,74 @@ export class ChzzkChat {
   }
 
   private async handleMessage(data: any) {
-    // console.log("handleMessage => ", data);
-    switch (data["cmd"]) {
-      case MsgCmd.PING:
-        this.sendMessage({
-          cmd: MsgCmd.PONG,
-          ver: "2",
-        });
-        break;
+    try {
+      let message, body;
+      const messageType = data["cmd"];
 
-      case MsgCmd.CONNECTED:
-        this.opt.sid = data["bdy"]?.sid;
-        this.ws.emit("connect", null);
+      switch (messageType) {
+        case MsgCmd.PING:
+          this.sendMessage({
+            cmd: MsgCmd.PONG,
+            ver: "2",
+          });
+          break;
 
-        break;
+        case MsgCmd.CONNECTED:
+          this.opt.sid = data["bdy"]?.sid;
+          this.ws.emit("connect", null);
+          break;
 
-      case MsgCmd.CHAT:
-        console.log(
-          JSON.parse(data["bdy"][0]["profile"]).nickname,
-          data["bdy"][0]["msg"]
-        );
-        break;
+        case MsgCmd.BLIND:
+          body = data["bdy"][0];
 
-      case MsgCmd.RECENT_CHAT:
-      case MsgCmd.DONATION:
-      case MsgCmd.KICK:
-      case MsgCmd.BLOCK:
-      case MsgCmd.BLIND:
-      case MsgCmd.NOTICE:
-      case MsgCmd.PENALTY:
-        console.log(data);
-        break;
+          message = {
+            type: MsgCmd[messageType],
+            cid: body["cid"],
+            ctime: body["ctime"],
+            bdy: body["bdy"],
+          };
+          this.messages.push(message);
+          break;
+
+        // case MsgCmd.CHAT:
+        case MsgCmd.RECENT_CHAT:
+        case MsgCmd.DONATION:
+        case MsgCmd.KICK:
+        case MsgCmd.BLOCK:
+        case MsgCmd.NOTICE:
+        case MsgCmd.PENALTY:
+          body = data["bdy"][0];
+
+          const profile = JSON.parse(body["profile"]);
+          const extras = JSON.parse(body["extras"]);
+          message = {
+            type: MsgCmd[messageType],
+            cid: body["cid"],
+            ctime: body["ctime"],
+            msg: body["msg"],
+            profile: profile,
+            extras: extras,
+          };
+          this.messages.push(message);
+          break;
+      }
+    } catch (e) {
+      console.log(data);
+      throw new Error(e);
     }
   }
 
-  async disconnect() {
+  pollingEvent() {
+    const messages = this.messages;
+    this.messages = [];
+
+    console.log(messages);
+    return messages;
+  }
+
+  async onEvent(messageType: MsgCmd) {}
+
+  private async disconnect() {
     if (this.pingIntervalId) {
       clearInterval(this.pingIntervalId);
     }
