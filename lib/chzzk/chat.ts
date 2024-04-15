@@ -127,12 +127,12 @@ export class ChzzkChat {
           break;
 
         case MsgCmd.CHAT:
-        case MsgCmd.RECENT_CHAT:
         case MsgCmd.DONATION:
-        case MsgCmd.KICK:
-        case MsgCmd.BLOCK:
-        case MsgCmd.NOTICE:
-        case MsgCmd.PENALTY:
+          //   case MsgCmd.RECENT_CHAT:
+          // case MsgCmd.KICK:
+          // case MsgCmd.BLOCK:
+          // case MsgCmd.NOTICE:
+          // case MsgCmd.PENALTY:
           body = data["bdy"][0];
 
           const profile = JSON.parse(body["profile"]);
