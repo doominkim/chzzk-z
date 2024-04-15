@@ -120,12 +120,13 @@ export class ChzzkChat {
             type: MsgCmd[messageType],
             cid: data.cid,
             ctime: body["messageTime"],
+            uid: body["userId"],
             bdy: body,
           };
           this.messages.push(message);
           break;
 
-        case MsgCmd.CHAT:
+        // case MsgCmd.CHAT:
         case MsgCmd.RECENT_CHAT:
         case MsgCmd.DONATION:
         case MsgCmd.KICK:
@@ -141,6 +142,7 @@ export class ChzzkChat {
             cid: body["cid"],
             ctime: body["ctime"],
             msg: body["msg"],
+            uid: profile?.userIdHash,
             profile: profile,
             extras: extras,
           };
