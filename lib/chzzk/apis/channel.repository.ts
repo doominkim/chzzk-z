@@ -45,4 +45,15 @@ export class ChzzkChannelRepository {
 
     return token;
   }
+
+  async findVideoById(
+    videoNo: string | number,
+    option: ChzzkModuleOptionDto
+  ): Promise<Response> {
+    return await getContents(
+      constants.props.chzzkBaseUrl + `/service/v1/videos/${videoNo}`,
+      HttpMethod.GET,
+      option
+    );
+  }
 }

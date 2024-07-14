@@ -1,6 +1,7 @@
 import { ChzzkLiveRepository } from "./apis";
 import { ChzzkModule } from "../module";
 import { ChzzkModuleOptionDto } from "./dtos/chzzk-connector-option.dto";
+import { LiveDetail } from "./types/live.types";
 
 export class ChzzkLive {
   private cm: ChzzkModule;
@@ -16,7 +17,7 @@ export class ChzzkLive {
     return await this.liveRepository.findStatusByChannelId(channelId, this.opt);
   }
 
-  async findDetailByChannelId(channelId: string) {
+  async findDetailByChannelId(channelId: string): Promise<LiveDetail> {
     return await this.liveRepository.findDetailByChannelId(channelId, this.opt);
   }
 }

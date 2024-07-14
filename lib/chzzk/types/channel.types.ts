@@ -13,3 +13,14 @@ export interface ChzzkChannel {
     iabAvailability: boolean;
   };
 }
+
+export interface PartialChannel {
+  channelId: string;
+  channelName: string;
+  channelImageUrl?: string;
+  verifiedMark: boolean;
+  userAdultStatus?: string;
+  personalData?: {
+    privateUserBlock: boolean;
+  };
+}

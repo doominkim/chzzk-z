@@ -26,4 +26,8 @@ export class ChzzkChannel {
       this.opt
     );
   }
+
+  async findVideoById(videoNo: string | number) {
+    return await this.chzzkChannelRepository.findVideoById(videoNo, this.opt);
+  }
 }
