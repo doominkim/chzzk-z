@@ -30,7 +30,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.7.2",
     "class-transformer": "^0.5.1",
+    "ffmpeg": "^0.0.4",
+    "fs": "^0.0.1-security",
+    "m3u8-parser": "^7.1.0",
     "ws": "^8.16.0"
   },
   "directories": {
