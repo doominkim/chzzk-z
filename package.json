@@ -1,7 +1,7 @@
 {
   "name": "chzzk-z",
   "displayName": "chzzk-z",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "chzzk-z is naver streaming platform Chzzk Library",
   "main": "dist/lib/index.js",
   "typings": "dist/lib/index.d.ts",
@@ -10,7 +10,8 @@
     "test": "jest --passWithNoTests",
     "test:e2e": "jest --config ./test/jest-e2e.json --passWithNoTests",
     "build": "tsc",
-    "lint": "eslint"
+    "lint": "eslint",
+    "start:dev": "npm run build && node dist/test.js"
   },
   "repository": {
     "type": "git",
