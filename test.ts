@@ -1,9 +1,9 @@
 import { ChzzkModule } from "./lib";
 import axios from "axios";
 import * as m3u8Parser from "m3u8-parser";
-// import * as ffmpeg from "ffmpeg";
 import * as fs from "fs";
-var ffmpeg = require("ffmpeg");
+var ffmpeg = require("fluent-ffmpeg");
+const speech = require("@google-cloud/speech");
 
 const test = async () => {
   const chzzk = new ChzzkModule();
@@ -15,78 +15,61 @@ const test = async () => {
   // const status = await chzzk.user.status();
   // console.log(status);
   const live = await chzzk.live.findDetailByChannelId(
-    "8803cee946a9e610a76fbdee98d98c61"
+    "6e06f5e1907f17eff543abd06cb62891"
   );
   const media = live.livePlayback.media;
   const hls = media.find((media) => media.mediaId === "HLS");
 
-  console.log(hls);
   if (hls) {
     const originalUrl = hls.path.split("/").slice(0, 7).join("/");
-    const response = await axios.get(hls.path, { responseType: "arraybuffer" });
+    const indexPlayList = await axios.get(hls.path, {
+      responseType: "arraybuffer",
+    });
     const parser = new m3u8Parser.Parser();
-    parser.push(response.data);
+    parser.push(indexPlayList.data);
     parser.end();
-    var parsedManifest = parser.manifest;
-    const playLists = parsedManifest.playlists;
-    const lastPlaylist = playLists[playLists.length - 1];
-    const secondM3U8File = await axios.get(
-      originalUrl + "/" + lastPlaylist.uri,
-      {
-        responseType: "arraybuffer",
-      }
-    );
-    fs.writeFileSync("first.m3u8", Buffer.from(response.data));
-    //   // console.log(secondM3U8File.data);
-    fs.writeFileSync("second.m3u8", Buffer.from(secondM3U8File.data));
-    const newParser = new m3u8Parser.Parser();
-    newParser.push(secondM3U8File.data);
-    let count = 1;
-    const fileWriter = fs.createWriteStream(`video.m4v`);
-    console.log(fileWriter);
-    // for (const segment of newParser.manifest.segments) {
-    //   console.log(segment);
-    //   const convertUrl = lastPlaylist.uri.split("/");
-    //   convertUrl.pop();
-    //   // console.log(originalUrl + "/" + convertUrl.join("/") + "/" + segment.uri);
-    //   // console.log(
-    //   //   originalUrl + "/" + convertUrl.join("/") + "/" + segment.map.uri
-    //   // );
-    //   const m4vStreamHeader = await axios.get(
-    //     originalUrl + "/" + convertUrl.join("/") + "/" + segment.map.uri,
-    //     {
-    //       responseType: "arraybuffer",
-    //     }
-    //   );
-    //   // console.log(m4vStreamHeader.data);
-    //   fs.writeFileSync(
-    //     `segment${count}header.m4s`,
-    //     Buffer.from(m4vStreamHeader.data)
-    //   );
-    //   const m4vStream = await axios.get(
-    //     originalUrl + "/" + convertUrl.join("/") + "/" + segment.uri,
-    //     {
-    //       responseType: "arraybuffer",
-    //     }
-    //   );
-    //   fs.writeFileSync(`segment${count}.m4v`, Buffer.from(m4vStream.data));
-    //   count++;
-    // }
-    // var process = new ffmpeg("video.m4v");
-    // process.then(function (video) {
-    //   video.fnExtractSoundToMP3("video.mp3", function (err, file) {
-    //     if (!err) console.log(file);
-    //     // console.log(err);
-    //   });
-    // });
-    // // const response = await axios.get(lastPlaylist.path);
-    // // for (const playlist of parsedManifest.playlists) {
-    // //   console.log(playlist.uri);
-    // // }
+
+    const hlsUrl = originalUrl + "/" + parser.manifest.playlists[0].uri;
+    const outputPrefix = "segment_%03d.mp4";
+
+    try {
+      ffmpeg(hlsUrl)
+        .output(outputPrefix)
+        .outputOptions([
+          "-f",
+          "segment",
+          "-segment_time",
+          "5", // 10초마다 세그먼트 생성
+        ])
+        .videoCodec("copy")
+        .audioCodec("copy")
+        .on("end", () => {
+          console.log("변환 완료!");
+        })
+        .on("error", (err) => {
+          console.error("오류 발생:", err);
+        })
+        .run();
+    } catch (e) {
+      console.log(e);
+    }
   }
 };
 
+const { exec } = require("child_process");
+
+function transcribeVideo(filePath) {
+  exec(`whisper ${filePath} --model medium`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  });
+}
 console.log("start test");
 test();
+// transcribeVideo("segment_000.mp4");
 
 console.log("end test");
