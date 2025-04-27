@@ -2,8 +2,9 @@ import { ChzzkModule } from "./lib";
 import axios from "axios";
 import * as m3u8Parser from "m3u8-parser";
 import * as fs from "fs";
-var ffmpeg = require("fluent-ffmpeg");
-const speech = require("@google-cloud/speech");
+import { StreamRecorder } from "./lib/chzzk/stream/stream-recorder";
+import { join } from "node:path";
+import { existsSync, mkdirSync } from "node:fs";
 
 const test = async () => {
   const chzzk = new ChzzkModule();
@@ -15,7 +16,7 @@ const test = async () => {
   // const status = await chzzk.user.status();
   // console.log(status);
   const live = await chzzk.live.findDetailByChannelId(
-    "6e06f5e1907f17eff543abd06cb62891"
+    "554e99695decc451d57788b1fd5d5c07"
   );
   const media = live.livePlayback.media;
   const hls = media.find((media) => media.mediaId === "HLS");
@@ -30,29 +31,26 @@ const test = async () => {
     parser.end();
 
     const hlsUrl = originalUrl + "/" + parser.manifest.playlists[0].uri;
-    const outputPrefix = "segment_%03d.mp4";
+    const outputDir = join(
+      process.cwd(),
+      "output",
+      `${live.channel.channelId}_${live.liveId}`
+    );
 
-    try {
-      ffmpeg(hlsUrl)
-        .output(outputPrefix)
-        .outputOptions([
-          "-f",
-          "segment",
-          "-segment_time",
-          "5", // 10초마다 세그먼트 생성
-        ])
-        .videoCodec("copy")
-        .audioCodec("copy")
-        .on("end", () => {
-          console.log("변환 완료!");
-        })
-        .on("error", (err) => {
-          console.error("오류 발생:", err);
-        })
-        .run();
-    } catch (e) {
-      console.log(e);
+    // output 디렉토리가 없으면 생성
+    if (!existsSync(outputDir)) {
+      mkdirSync(outputDir, { recursive: true });
     }
+
+    const recorder = new StreamRecorder(hlsUrl, outputDir);
+    console.log("Recording started...");
+    await recorder.start();
+
+    // 30초 후에 중지
+    setTimeout(() => {
+      recorder.stop();
+      console.log("Recording stopped");
+    }, 30000);
   }
 };
 
@@ -69,7 +67,7 @@ function transcribeVideo(filePath) {
   });
 }
 console.log("start test");
-test();
+test().catch(console.error);
 // transcribeVideo("segment_000.mp4");
 
 console.log("end test");

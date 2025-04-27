@@ -133,3 +133,6 @@ dist
 
 .mp4
 .mp3
+
+# Output files
+output/
